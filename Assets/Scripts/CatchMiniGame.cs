@@ -100,7 +100,7 @@ public class CatchMiniGame : MonoBehaviour
         fishingRodFillImage.fillAmount = 1 - (_timer / _timeToSolve);
         if (_timer > _timeToSolve)
         {
-            GameManager.Instance.GetCards(_solvedAmount);
+            GameManager.Instance.GeneratePack(_solvedAmount);
             gameObject.SetActive(false);
         }
     }

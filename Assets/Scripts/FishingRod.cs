@@ -25,7 +25,11 @@ public class FishingRod : MonoBehaviour
 
     public void Interact()
     {
-        if (_miniGame) return;
+        if (_miniGame)
+        {
+            GameManager.Instance.OpenPack();
+            return;
+        }
         
         if (_released)
         {
@@ -61,6 +65,7 @@ public class FishingRod : MonoBehaviour
     private void StartCatchMiniGame()
     {
         GameManager.Instance.StartMiniGame();
+        _miniGame = true;
     }
 
     

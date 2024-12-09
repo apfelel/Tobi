@@ -20,6 +20,7 @@ public class MonoSingleton<T> : MonoBehaviour where T: MonoSingleton<T>
 
     private void Awake()
     {
+        DontDestroyOnLoad(this);
         _instance = (T)this;
     }
 }
