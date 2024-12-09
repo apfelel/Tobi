@@ -4,6 +4,8 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
+    private CatchMiniGame _catchMiniGame;
+    
     private PlayerInputs _input;
     private InputAction _move, _interact;
     private FishingRod _fishingRod;
@@ -39,11 +41,12 @@ public class Player : MonoBehaviour
     private void Start()
     {
         _fishingRod = GetComponent<FishingRod>();
+        _catchMiniGame = GameManager.Instance.catchMiniGame;
     }
 
     private void DirectionInput(InputAction.CallbackContext obj)
     {
-        Debug.Log(obj.ReadValue<Vector2>().ToString());
+        _catchMiniGame.TrySolve(obj.ReadValue<Vector2>());
     }
 
     private void Interact(InputAction.CallbackContext obj)

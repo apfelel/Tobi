@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 public class GameManager : MonoSingleton<GameManager>
 {
     public List<CardScriptableObject> droppableCards;
-    
+    [Space] public CatchMiniGame catchMiniGame;
 
     [SerializeField] private float _randomRange;
     private void Start()
@@ -22,7 +22,6 @@ public class GameManager : MonoSingleton<GameManager>
     }
     public List<CardScriptableObject> GetCards(int amount)
     {
-        
         List<CardScriptableObject> cardPack = new();
         
         for (int i = 0; i < amount; i++)
@@ -45,6 +44,6 @@ public class GameManager : MonoSingleton<GameManager>
 
     public void StartMiniGame()
     {
-        
+        catchMiniGame.gameObject.SetActive(true);
     }
 }

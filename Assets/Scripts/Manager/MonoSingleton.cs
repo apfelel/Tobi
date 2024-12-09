@@ -12,10 +12,9 @@ public class MonoSingleton<T> : MonoBehaviour where T: MonoSingleton<T>
             if (_instance == null)
             {
                 Debug.LogWarning(typeof(T).Name + "Missing");
-                throw new Exception();
             }
 
-            return Instance;
+            return _instance;
         }
     }
 

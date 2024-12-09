@@ -58,9 +58,9 @@ public class FishingRod : MonoBehaviour
         }
     }
 
-    public void StartCatchMiniGame()
+    private void StartCatchMiniGame()
     {
-        
+        GameManager.Instance.StartMiniGame();
     }
 
     
