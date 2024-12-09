@@ -36,9 +36,8 @@ public class FishingRod : MonoBehaviour
     {
         _baitTargetPosition = _baitStartPosition + new Vector3(Mathf.Sin(Time.time / 5) * 0.5f, Mathf.Sin((Mathf.PI / 2 + Time.time) / 5) * 0.5f, 0);
         _baitGameObject.transform.position = Vector3.Lerp(_baitGameObject.transform.position, _baitTargetPosition, 0.1f);
-        if (_pauseFishingLogic || _miniGame) return;
-        if (!_released) return;
         
+        if (_pauseFishingLogic || _miniGame) return;
         
         if (_released && !_hooked)
         {
@@ -46,7 +45,6 @@ public class FishingRod : MonoBehaviour
             
             StartCoroutine(RandomInt(averageFakePulls) == 0 ? RealPull() : FakePull());
         }
-        
     }
     public void Interact()
     {
