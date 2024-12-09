@@ -51,7 +51,7 @@ public class CardCollection : MonoBehaviour
     {
         _curRarity += change;
         Debug.Log(_curRarity);
-        _curRarity = Mathf.Clamp(_curRarity, 0, GameManager.Instance.maxUniqueCombinations );
+        _curRarity = Mathf.Clamp(_curRarity, 0, GameManager.Instance.maxUniqueCombinations - 1);
         Debug.Log(_curRarity);
         Refresh();
     }
