@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using DG.Tweening;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -15,19 +16,29 @@ public class FishingRod : MonoBehaviour
     private bool _miniGame;
     private bool _pauseFishingLogic;
     private bool _resetOnNextInteract;
-    public SpriteRenderer bait;
+    
+    public SpriteRenderer baitSpriteRenderer;
+    private GameObject _baitGameObject;
 
+    private Vector3 _baitTargetPosition;
+    private Vector3 _baitStartPosition;
 
     private void Start()
     {
-        bait.color = Color.gray;
+        baitSpriteRenderer.color = Color.gray;
+        _baitGameObject = baitSpriteRenderer.gameObject;
+        _baitStartPosition = _baitGameObject.transform.position;
     }
 
     
     
     void FixedUpdate()
     {
+        _baitTargetPosition = _baitStartPosition + new Vector3(Mathf.Sin(Time.time / 5) * 0.5f, Mathf.Sin((Mathf.PI / 2 + Time.time) / 5) * 0.5f, 0);
+        _baitGameObject.transform.position = Vector3.Lerp(_baitGameObject.transform.position, _baitTargetPosition, 0.1f);
         if (_pauseFishingLogic || _miniGame) return;
+        if (!_released) return;
+        
         
         if (_released && !_hooked)
         {
@@ -35,6 +46,7 @@ public class FishingRod : MonoBehaviour
             
             StartCoroutine(RandomInt(averageFakePulls) == 0 ? RealPull() : FakePull());
         }
+        
     }
     public void Interact()
     {
@@ -68,7 +80,7 @@ public class FishingRod : MonoBehaviour
         _released = true;
         _hooked = false;
         _miniGame = false;
-        bait.color = Color.white;
+        baitSpriteRenderer.color = Color.white;
 
     }
 
@@ -79,7 +91,7 @@ public class FishingRod : MonoBehaviour
         _hooked = false;
         _miniGame = false;
         _resetOnNextInteract = false;
-        bait.color = Color.gray;
+        baitSpriteRenderer.color = Color.gray;
         
         StopAllCoroutines();
     }
@@ -102,24 +114,32 @@ public class FishingRod : MonoBehaviour
     private IEnumerator FakePull()
     {
         Debug.Log("Fake");
-        bait.color = Color.yellow;
+        var sequence = DOTween.Sequence();
+        sequence.Append(_baitGameObject.transform.DOMove(_baitTargetPosition +  new Vector3(0, -0.1f, 8), fakePullDuration / 2).SetEase(Ease.OutCubic));
+        sequence.Append(_baitGameObject.transform.DOMove(_baitTargetPosition +  new Vector3(0, 0.1f, 8), fakePullDuration / 2).SetEase(Ease.OutCubic));
+        
+        baitSpriteRenderer.color = Color.yellow;
         
         StartCoroutine(LogicPause(fakePullDuration));
         yield return new WaitForSeconds(fakePullDuration);
         
-        bait.color = Color.white;
+        baitSpriteRenderer.color = Color.white;
 
     }
     private IEnumerator RealPull()
     {
         Debug.Log("Real");
-        bait.color = Color.green;
+        var sequence = DOTween.Sequence();
+        sequence.Append(_baitGameObject.transform.DOMove(_baitTargetPosition +  new Vector3(0, -0.3f, 8), fakePullDuration / 2).SetEase(Ease.OutCubic));
+        sequence.Append(_baitGameObject.transform.DOMove(_baitTargetPosition +  new Vector3(0, 0.3f, 8), fakePullDuration / 2).SetEase(Ease.OutCubic));
+        
+        baitSpriteRenderer.color = Color.green;
         _hooked = true;
         
         StartCoroutine(LogicPause(realPullDuration));
         yield return new WaitForSeconds(realPullDuration);
         
-        bait.color = Color.white;
+        baitSpriteRenderer.color = Color.white;
         _hooked = false;
     }
     private IEnumerator LogicPause(float time)
