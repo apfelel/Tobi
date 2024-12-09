@@ -12,4 +12,5 @@ public class CardScriptableObject : ScriptableObject
     public Sprite icon;
 
     public float minLength, maxLength;
+    
 }

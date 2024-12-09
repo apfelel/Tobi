@@ -14,7 +14,7 @@ public class FishingRod : MonoBehaviour
     private bool _hooked;
     private bool _miniGame;
     private bool _pauseFishingLogic;
-
+    private bool _resetOnNextInteract;
     public SpriteRenderer bait;
 
 
@@ -23,11 +23,32 @@ public class FishingRod : MonoBehaviour
         bait.color = Color.gray;
     }
 
+    
+    
+    void FixedUpdate()
+    {
+        if (_pauseFishingLogic || _miniGame) return;
+        
+        if (_released && !_hooked)
+        {
+            if (RandomInt(60 * averagePullTime) != 0) return;
+            
+            StartCoroutine(RandomInt(averageFakePulls) == 0 ? RealPull() : FakePull());
+        }
+    }
     public void Interact()
     {
         if (_miniGame)
         {
-            GameManager.Instance.OpenPack();
+            if (_resetOnNextInteract)
+            {
+                ResetFishingRod();
+                GameManager.Instance.StashPack();
+                return;
+            }
+            
+            if (GameManager.Instance.OpenPack())
+                _resetOnNextInteract = true;
             return;
         }
         
@@ -51,14 +72,24 @@ public class FishingRod : MonoBehaviour
 
     }
 
+    private void ResetFishingRod()
+    {
+        _pauseFishingLogic = false;
+        _released = false;
+        _hooked = false;
+        _miniGame = false;
+        _resetOnNextInteract = false;
+        bait.color = Color.gray;
+        
+        StopAllCoroutines();
+    }
     private void TryCatch()
     {
         if(_hooked)
             StartCatchMiniGame();
         else
         {
-            _released = false;
-            bait.color = Color.gray;
+            ResetFishingRod();
         }
     }
 
@@ -66,19 +97,6 @@ public class FishingRod : MonoBehaviour
     {
         GameManager.Instance.StartMiniGame();
         _miniGame = true;
-    }
-
-    
-    void FixedUpdate()
-    {
-        if (_pauseFishingLogic || _miniGame) return;
-        
-        if (_released && !_hooked)
-        {
-            if (RandomInt(60 * averagePullTime) != 0) return;
-            
-            StartCoroutine(RandomInt(averageFakePulls) == 0 ? RealPull() : FakePull());
-        }
     }
 
     private IEnumerator FakePull()

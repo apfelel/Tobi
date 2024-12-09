@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class CardEnums
@@ -6,7 +7,8 @@ public class CardEnums
     {
         SSS, S, A, B, C, D
     }
-    public enum UniqueTypes
+    [Flags]
+    public enum UniqueTypes : byte
     {
         Shiny, Holo        
     }

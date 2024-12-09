@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
     private CatchMiniGame _catchMiniGame;
     
     private PlayerInputs _input;
-    private InputAction _move, _interact;
+    private InputAction _move, _interact, _pause;
     private FishingRod _fishingRod;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
         _input = new();
         _interact = _input.Player.Interact;
         _move = _input.Player.Move;
+        _pause = _input.Player.Pause;
     }
     private void OnEnable()
     {
@@ -26,11 +27,16 @@ public class Player : MonoBehaviour
 
         _move.performed += DirectionInput;
         _move.Enable();
-
+        
+        _pause.performed += ToggleCardCollection;
+        _pause.Enable();
     }
+
+
     private void OnDisable()
     {
         _input.Disable();
+        
         _interact.performed -= Interact;
         _interact.Disable();
 
@@ -52,6 +58,10 @@ public class Player : MonoBehaviour
     private void Interact(InputAction.CallbackContext obj)
     {
         _fishingRod.Interact();
+    }
+    private void ToggleCardCollection(InputAction.CallbackContext obj)
+    {
+        UIManager.Instance.ToggleCardCollection();
     }
 
     // Update is called once per frame

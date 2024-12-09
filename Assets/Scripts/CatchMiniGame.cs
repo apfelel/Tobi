@@ -38,6 +38,18 @@ public class CatchMiniGame : MonoBehaviour
         _initialized = false;
     }
 
+    private void FixedUpdate()
+    {
+        _timer += Time.fixedDeltaTime;
+        fishingRodFillImage.fillAmount = 1 - (_timer / _timeToSolve);
+        if (_timer > _timeToSolve)
+        {
+            GameManager.Instance.GeneratePack(_solvedAmount);
+            gameObject.SetActive(false);
+            _timer = 0;
+        }
+    }
+    
     void InitializeMiniGame()
     {
         //TODO debug 
@@ -94,14 +106,5 @@ public class CatchMiniGame : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
-    {
-        _timer += Time.fixedDeltaTime;
-        fishingRodFillImage.fillAmount = 1 - (_timer / _timeToSolve);
-        if (_timer > _timeToSolve)
-        {
-            GameManager.Instance.GeneratePack(_solvedAmount);
-            gameObject.SetActive(false);
-        }
-    }
+
 }
