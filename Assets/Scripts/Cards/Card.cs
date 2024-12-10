@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[System.Serializable]
 public class Card
 {
     public float length;
@@ -33,6 +34,7 @@ public class Card
     }
 }
 
+[System.Serializable]
 public class CardSlot
 {
     public CardSlot(Card card)

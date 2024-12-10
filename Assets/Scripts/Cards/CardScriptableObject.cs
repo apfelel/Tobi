@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+
+[System.Serializable]
 [CreateAssetMenu(fileName = "Card", menuName = "New Card", order = 1)]
 public class CardScriptableObject : ScriptableObject
 {

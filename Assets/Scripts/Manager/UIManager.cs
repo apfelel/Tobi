@@ -4,20 +4,9 @@ using UnityEngine.UI;
 
 public class UIManager : MonoSingleton<UIManager>
 {
-    [SerializeField] private GameObject cardCollection, settingsMenu;
+    [SerializeField] private GameObject cardCollection, settingsMenu, pauseMenu;
 
     [SerializeField] private Selectable DefaultButton;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void ToggleCardCollection()
     {
@@ -51,5 +40,18 @@ public class UIManager : MonoSingleton<UIManager>
     public void BackToMainMenu()
     {
         SceneManager.LoadScene("MainMenu");
+    }
+
+    public void TogglePauseMenu()
+    {
+        if (pauseMenu.activeInHierarchy)
+        {
+            pauseMenu.SetActive(false);
+        }
+        else
+        {
+            pauseMenu.SetActive(true);
+            pauseMenu.GetComponentInChildren<Selectable>().Select();
+        }
     }
 }

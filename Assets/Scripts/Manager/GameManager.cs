@@ -9,13 +9,12 @@ public class GameManager : MonoSingleton<GameManager>
     public List<CardScriptableObject> droppableCards;
     [Space] public CatchMiniGame catchMiniGame;
     
-    private List<Card> _collectedCards = new();
+    //private List<Card> _collectedCards = new();
     private List<Card> _curCardPack = new();
     private CardSlot[,] _sortedCollectedCardSlots;
     [SerializeField] private GameObject _cardPrefab;
     [SerializeField] private Transform _cardParent;
     [SerializeField] private GameObject _closedPack;
-    
     [SerializeField] private float _randomRange;
 
     public int maxUniqueCombinations = 4;
@@ -23,8 +22,9 @@ public class GameManager : MonoSingleton<GameManager>
     {
         CalculateRandomRange();
         _closedPack.SetActive(false);
-
         _sortedCollectedCardSlots = new CardSlot[droppableCards.Count, maxUniqueCombinations];
+        _sortedCollectedCardSlots = DataPersistenceManager.Instance.LoadGame();
+
     }
     [ContextMenu("ManualCalculation")]
     private void CalculateRandomRange()
@@ -53,7 +53,7 @@ public class GameManager : MonoSingleton<GameManager>
             if (cardSlot.BestCard.length < randomCard.length)
                 cardSlot.BestCard = randomCard;
             
-            _collectedCards.Add(new Card(randomCardSO));
+            //_collectedCards.Add(new Card(randomCardSO));
         }
         ShowClosedPack();
     }
