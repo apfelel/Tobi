@@ -62,11 +62,13 @@ public class Player : MonoBehaviour
 
     private void DirectionInput(InputAction.CallbackContext obj)
     {
+        if (UIManager.Instance.inMenu) return;
         _catchMiniGame.TrySolve(obj.ReadValue<Vector2>());
     }
 
     private void Interact(InputAction.CallbackContext obj)
     {
+        if (UIManager.Instance.inMenu) return;
         _fishingRod.Interact();
     }
     private void ToggleCardCollection(InputAction.CallbackContext obj)

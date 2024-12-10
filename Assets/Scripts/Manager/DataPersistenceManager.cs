@@ -12,7 +12,6 @@ public class DataPersistenceManager : MonoSingleton<DataPersistenceManager>
       dataDirPath = Application.persistentDataPath;
       dataFileName = "SaveFile.game";
       Debug.Log(dataDirPath);
-
    }
 
    private void OnApplicationQuit()

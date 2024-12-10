@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,11 +24,11 @@ public class CatchMiniGame : MonoBehaviour
     private List<Directions> _inputActions = new();
     private int _curActionIndex;
     private int _solvedAmount;
-    
     private bool _initialized;
     
     private void OnEnable()
     {
+        _initialized = false;
         InitializeMiniGame();
     }
 
@@ -55,12 +56,13 @@ public class CatchMiniGame : MonoBehaviour
         //TODO debug 
         _initialized = true;
         _solvedAmount = 0;
-        _actionAmount = 4;
-        Generate(4);
+        Generate(2);
     }
 
     private void Generate(int buttons)
     {
+        
+        _actionAmount =  buttons;
         _inputActions.Clear();
         _curActionIndex = 0;
 
@@ -71,11 +73,13 @@ public class CatchMiniGame : MonoBehaviour
         
         for (int i = 0; i < buttons; i++)
         {
-            int randomInt = Mathf.RoundToInt(Random.Range(0, 3));
+            int randomInt = Mathf.RoundToInt(Random.Range(0, 4));
             _inputActions.Add((Directions)randomInt);
             var arrow = Instantiate(arrowGameobject, arrowParent);
             arrow.transform.Rotate(new Vector3(0, 0, -90 * randomInt));
         }
+        
+        _initialized = true;
     }
 
     public void TrySolve(Vector2 input)
@@ -95,16 +99,21 @@ public class CatchMiniGame : MonoBehaviour
             _curActionIndex++;
             if (_curActionIndex == _actionAmount)
             {
-                Generate(4);
                 _solvedAmount++;
+                StartCoroutine(DelayedGeneration(0.2f));
             }
         }
         else
         {
+            arrowParent.GetChild(_curActionIndex).GetComponent<Image>().color = Color.red;
             _timer += _timePenalty;
-            Generate(4);
+            StartCoroutine(DelayedGeneration(0.2f));
         }
     }
-
-
+    IEnumerator DelayedGeneration(float time)
+    {
+        _initialized = false;
+        yield return new WaitForSeconds(time);
+        Generate(Mathf.Clamp(_solvedAmount / 2, 2, 6));
+    }
 }

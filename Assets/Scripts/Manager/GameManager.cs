@@ -16,6 +16,9 @@ public class GameManager : MonoSingleton<GameManager>
     [SerializeField] private Transform _cardParent;
     [SerializeField] private GameObject _closedPack;
     [SerializeField] private float _randomRange;
+    [SerializeField] private float _qualityComboMultiplier = 0.03f;
+    
+    [SerializeField] private FishingRod _fishingRod;
 
     public int maxUniqueCombinations = 4;
     private void Start()
@@ -34,9 +37,22 @@ public class GameManager : MonoSingleton<GameManager>
     }
     public void GeneratePack(int amount)
     {
+        _fishingRod.MiniGameFinished();
+        
+        int qualityIncrease = 0;
+        if (amount >= 5)
+        {
+            qualityIncrease = amount - 5;
+            amount = 5;
+            Debug.Log(qualityIncrease);
+        }
         for (int i = 0; i < amount; i++)
         {
             float randomFloat = Random.Range(0, _randomRange);
+            Debug.Log(randomFloat);
+            randomFloat = Mathf.Pow(randomFloat / _randomRange, Mathf.Clamp01(1 - _qualityComboMultiplier * qualityIncrease)) * _randomRange;
+            Debug.Log(randomFloat);
+            
             var randomCardSO = droppableCards.FirstOrDefault((c) =>
             {
                 randomFloat -= c.dropChance;
@@ -48,8 +64,10 @@ public class GameManager : MonoSingleton<GameManager>
 
             var randomCard = new Card(randomCardSO); 
             _curCardPack.Add(randomCard);
+            
             var cardSlot = _sortedCollectedCardSlots[droppableCards.IndexOf(randomCardSO), randomCard.rarityIndex] ??= new CardSlot(randomCard);
             cardSlot.CardAmount += 1;
+            
             if (cardSlot.BestCard.length < randomCard.length)
                 cardSlot.BestCard = randomCard;
             

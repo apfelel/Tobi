@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 44521047fbc3aac469d86956ea78995d, type: 3}
-  m_Name: TrashTest2
+  m_Name: JOJOFish
   m_EditorClassIdentifier: 
-  cardName: Cooler Trash
-  rarity: 0
-  dropChance: 1
+  cardName: JOJO Fish
+  rarity: 1
+  dropChance: 500
   background: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
-  icon: {fileID: 21300000, guid: 42f4b048501996743958df91513f824a, type: 3}
-  minLength: 100
-  maxLength: 200
+  icon: {fileID: 2120348897315701322, guid: 16b5b00382aaac147909b150fa5c353c, type: 3}
+  minLength: 400
+  maxLength: 800

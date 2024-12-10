@@ -29,8 +29,12 @@ public class FishingRod : MonoBehaviour
     private bool _inAnimation;
 
     private float _baitWiggleTimer;
+    [Space] [Header("SoundStuff")] [SerializeField] private AudioClip _throwOutAudio;
+    [SerializeField] private AudioClip _reelInAudio, _bigWaterSplashAudio, _realBiteAudio, _fakeBiteAudio;
+    private AudioSource _audioSource;
     private void Start()
     {
+        _audioSource = GetComponent<AudioSource>();
         baitSpriteRenderer.color = Color.gray;
         _baitGameObject = baitSpriteRenderer.gameObject;
         _baitStartPosition = _baitGameObject.transform.position;
@@ -66,7 +70,6 @@ public class FishingRod : MonoBehaviour
         {
             if (GameManager.Instance.OpenPack())
             {
-                ResetFishingRod();
                 _closePackOnNextInteract = true;
             }
             return;
@@ -81,9 +84,14 @@ public class FishingRod : MonoBehaviour
         }
         StopAllCoroutines();
     }
-    
+
+    public void MiniGameFinished()
+    {
+        ResetFishingRod();
+    }
     private void ThrowBait()
     {
+        _baitGameObject.transform.SetParent(null);
         fishingLine.ThrowOut();
         _inAnimation = true;
         _baitGameObject.transform.DOMove(_baitTargetPosition, 1).OnComplete(ThrowBaitCompleted);
@@ -93,13 +101,14 @@ public class FishingRod : MonoBehaviour
         _hooked = false;
         _miniGame = false;
         baitSpriteRenderer.color = Color.white;
-
+        _audioSource.PlayOneShot(_throwOutAudio);
     }
 
     void ThrowBaitCompleted()
     {
         _inAnimation = false;
         fishingLine.LetLoose();
+        _audioSource.PlayOneShot(_bigWaterSplashAudio);
     }
     
     private void ResetFishingRod()
@@ -113,18 +122,22 @@ public class FishingRod : MonoBehaviour
         _inAnimation = true;
         fishingLine.PullIn();
         _baitGameObject.transform.DOMove(_fishingRodTipGameObject.transform.position, 1).OnComplete(ReelInCompleted);
-        
+        _audioSource.PlayOneShot(_reelInAudio);
     }
 
     void ReelInCompleted()
     {
         _inAnimation = false;
+        _baitGameObject.transform.SetParent(_fishingRodTipGameObject.transform);
     }
     
     private void TryCatch()
     {
-        if(_hooked)
+        if (_hooked)
+        {
             StartCatchMiniGame();
+            fishingLine.PullIn();
+        }
         else
         {
             ResetFishingRod();
@@ -145,6 +158,7 @@ public class FishingRod : MonoBehaviour
         
         baitSpriteRenderer.color = Color.yellow;
         
+
         StartCoroutine(LogicPause(fakePullDuration));
         yield return new WaitForSeconds(fakePullDuration);
         
@@ -159,6 +173,8 @@ public class FishingRod : MonoBehaviour
         sequence.Append(_baitGameObject.transform.DOMove(_baitTargetPosition, fakePullDuration / 2).SetEase(Ease.OutCubic));
         
         baitSpriteRenderer.color = Color.green;
+        _audioSource.PlayOneShot(_realBiteAudio);
+
         _hooked = true;
         
         StartCoroutine(LogicPause(realPullDuration));
