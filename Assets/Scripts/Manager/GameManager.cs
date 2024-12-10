@@ -62,7 +62,7 @@ public class GameManager : MonoSingleton<GameManager>
             if (!randomCardSO)
                 randomCardSO = droppableCards.Last();
 
-            var randomCard = new Card(randomCardSO); 
+            var randomCard = new Card(randomCardSO, qualityIncrease); 
             _curCardPack.Add(randomCard);
             
             var cardSlot = _sortedCollectedCardSlots[droppableCards.IndexOf(randomCardSO), randomCard.rarityIndex] ??= new CardSlot(randomCard);

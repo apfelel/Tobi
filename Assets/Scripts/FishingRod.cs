@@ -18,7 +18,7 @@ public class FishingRod : MonoBehaviour
     private bool _miniGame;
     private bool _pauseFishingLogic;
     private bool _closePackOnNextInteract;
-    
+    private bool _miniGameEnd;
     public FishingLine fishingLine;
     public SpriteRenderer baitSpriteRenderer;
     private GameObject _baitGameObject;
@@ -58,22 +58,24 @@ public class FishingRod : MonoBehaviour
     }
     public void Interact()
     {
-        if (_inAnimation) return;
-        
-        if (_closePackOnNextInteract)
+        if (_miniGameEnd)
         {
-            GameManager.Instance.StashPack();
-            _closePackOnNextInteract = false;
-            return;
-        }
-        if (_miniGame)
-        {
+            if (_closePackOnNextInteract)
+            {
+                GameManager.Instance.StashPack();
+                _closePackOnNextInteract = false;
+                _miniGameEnd = false;
+                return;
+            }
             if (GameManager.Instance.OpenPack())
             {
                 _closePackOnNextInteract = true;
             }
             return;
         }
+        
+        if (_inAnimation) return;
+        
         if (_released)
         {
             TryCatch();
@@ -88,6 +90,7 @@ public class FishingRod : MonoBehaviour
     public void MiniGameFinished()
     {
         ResetFishingRod();
+        _miniGameEnd = true;
     }
     private void ThrowBait()
     {

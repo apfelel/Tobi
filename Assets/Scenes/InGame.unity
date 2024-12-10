@@ -1796,6 +1796,7 @@ MonoBehaviour:
   _closedPack: {fileID: 1345663017}
   _randomRange: 10
   _qualityComboMultiplier: 0.05
+  _fishingRod: {fileID: 1290896646}
   maxUniqueCombinations: 4
 --- !u!4 &622250829
 Transform:

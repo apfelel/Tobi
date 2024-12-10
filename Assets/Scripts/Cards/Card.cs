@@ -23,13 +23,14 @@ public class Card
         baseCardInfo = cardInfosRef;
         uniqueTypes = null;
         var qualityMod = Mathf.Pow(1.5f, qualityIncrease);
-        if (Random.Range(0, 10f) <= 1 * qualityMod)
+        Debug.Log(qualityMod);
+        if (Random.Range(0, 20f) <= 1 * qualityMod)
         {
             uniqueTypes = CardEnums.UniqueTypes.Holo;
             rarityIndex = 1;
         }
 
-        if (Random.Range(0, 10f) <= 1 * qualityMod)
+        if (Random.Range(0, 20f) <= 1 * qualityMod)
         {
             uniqueTypes = null;
             uniqueTypes = CardEnums.UniqueTypes.Shiny;
