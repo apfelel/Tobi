@@ -85,12 +85,12 @@ public class CatchMiniGame : MonoBehaviour
     public void TrySolve(Vector2 input)
     {
         if (!_initialized) return;
-        if (input.magnitude < 0.9f) return;
+        if (Mathf.Abs(input.x) < 0.8f && Mathf.Abs(input.y) < 0.8f) return;
         Directions inputDirection;
         
-        if (input.x >= 0.8f) inputDirection = Directions.Right;
-        else if (input.x <= -0.8f) inputDirection = Directions.Left;
-        else if (input.y >= 0.8f) inputDirection = Directions.Up;
+        if (input.x >= 0.6f) inputDirection = Directions.Right;
+        else if (input.x <= -0.6f) inputDirection = Directions.Left;
+        else if (input.y >= 0.6f) inputDirection = Directions.Up;
         else inputDirection = Directions.Down;
         
         if(_inputActions[_curActionIndex] == inputDirection)
@@ -107,13 +107,13 @@ public class CatchMiniGame : MonoBehaviour
         {
             arrowParent.GetChild(_curActionIndex).GetComponent<Image>().color = Color.red;
             _timer += _timePenalty;
-            StartCoroutine(DelayedGeneration(0.2f));
+            StartCoroutine(DelayedGeneration(0.7f));
         }
     }
     IEnumerator DelayedGeneration(float time)
     {
         _initialized = false;
         yield return new WaitForSeconds(time);
-        Generate(Mathf.Clamp(_solvedAmount / 2, 2, 6));
+        Generate(Mathf.Clamp((_solvedAmount + 3) / 2, 2, 6));
     }
 }

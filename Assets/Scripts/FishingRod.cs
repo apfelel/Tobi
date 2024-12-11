@@ -13,15 +13,14 @@ public class FishingRod : MonoBehaviour
     
     [SerializeField] private GameObject _fishingRodTipGameObject;
     
-    private bool _released;
+    [HideInInspector] public bool _released;
     private bool _hooked;
     private bool _miniGame;
     private bool _pauseFishingLogic;
     private bool _closePackOnNextInteract;
     private bool _miniGameEnd;
     public FishingLine fishingLine;
-    public SpriteRenderer baitSpriteRenderer;
-    private GameObject _baitGameObject;
+    [SerializeField] private GameObject _baitGameObject;
 
     private Vector3 _baitTargetPosition;
     private Vector3 _baitStartPosition;
@@ -32,11 +31,11 @@ public class FishingRod : MonoBehaviour
     [Space] [Header("SoundStuff")] [SerializeField] private AudioClip _throwOutAudio;
     [SerializeField] private AudioClip _reelInAudio, _bigWaterSplashAudio, _realBiteAudio, _fakeBiteAudio;
     private AudioSource _audioSource;
+
+    public SplashHelper _splashHelper;
     private void Start()
     {
         _audioSource = GetComponent<AudioSource>();
-        baitSpriteRenderer.color = Color.gray;
-        _baitGameObject = baitSpriteRenderer.gameObject;
         _baitStartPosition = _baitGameObject.transform.position;
         _baitTargetPosition = _baitStartPosition;
         _baitGameObject.transform.position = _fishingRodTipGameObject.transform.position;
@@ -48,7 +47,7 @@ public class FishingRod : MonoBehaviour
         if (_released && !_hooked)
         {
             _baitWiggleTimer += Time.fixedDeltaTime;
-            _baitTargetPosition = _baitStartPosition + new Vector3(Mathf.Sin(_baitWiggleTimer / 5) * 0.5f, Mathf.Sin((Mathf.PI / 2 + _baitWiggleTimer) / 5) * 0.5f, 0);
+            _baitTargetPosition = _baitStartPosition + new Vector3(Mathf.Sin(_baitWiggleTimer / 5) * 0.5f, 0, Mathf.Sin((Mathf.PI / 2 + _baitWiggleTimer) / 5) * 0.5f);
             _baitGameObject.transform.position = Vector3.Lerp(_baitGameObject.transform.position, _baitTargetPosition, 0.1f);
             
             if (RandomInt(60 * averagePullTime) != 0) return;
@@ -103,7 +102,6 @@ public class FishingRod : MonoBehaviour
         _released = true;
         _hooked = false;
         _miniGame = false;
-        baitSpriteRenderer.color = Color.white;
         _audioSource.PlayOneShot(_throwOutAudio);
     }
 
@@ -112,15 +110,16 @@ public class FishingRod : MonoBehaviour
         _inAnimation = false;
         fishingLine.LetLoose();
         _audioSource.PlayOneShot(_bigWaterSplashAudio);
+        _splashHelper.ShowSplash();
     }
     
     private void ResetFishingRod()
     {
+        _splashHelper.HideSplash();
         _pauseFishingLogic = false;
         _released = false;
         _hooked = false;
         _miniGame = false;
-        baitSpriteRenderer.color = Color.gray;
         
         _inAnimation = true;
         fishingLine.PullIn();
@@ -159,14 +158,10 @@ public class FishingRod : MonoBehaviour
         sequence.Append(_baitGameObject.transform.DOMove(_baitTargetPosition +  new Vector3(0, -0.1f, 0), fakePullDuration / 2).SetEase(Ease.OutCubic));
         sequence.Append(_baitGameObject.transform.DOMove( _baitTargetPosition, fakePullDuration / 2).SetEase(Ease.OutCubic));
         
-        baitSpriteRenderer.color = Color.yellow;
-        
+        _audioSource.PlayOneShot(_fakeBiteAudio, 0.3f);
 
         StartCoroutine(LogicPause(fakePullDuration));
         yield return new WaitForSeconds(fakePullDuration);
-        
-        baitSpriteRenderer.color = Color.white;
-
     }
 
     private IEnumerator RealPull()
@@ -175,15 +170,13 @@ public class FishingRod : MonoBehaviour
         sequence.Append(_baitGameObject.transform.DOMove(_baitTargetPosition +  new Vector3(0, -0.5f, 0), fakePullDuration / 2).SetEase(Ease.OutCubic));
         sequence.Append(_baitGameObject.transform.DOMove(_baitTargetPosition, fakePullDuration / 2).SetEase(Ease.OutCubic));
         
-        baitSpriteRenderer.color = Color.green;
         _audioSource.PlayOneShot(_realBiteAudio);
-
+        _audioSource.PlayOneShot(_fakeBiteAudio, 0.5f);
         _hooked = true;
         
         StartCoroutine(LogicPause(realPullDuration));
         yield return new WaitForSeconds(realPullDuration);
         
-        baitSpriteRenderer.color = Color.white;
         _hooked = false;
     }
     private IEnumerator LogicPause(float time)

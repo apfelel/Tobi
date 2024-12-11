@@ -1,15 +1,13 @@
 using System;
-using UnityEngine;
-
 public class CardEnums
 {
     public enum Rarities
     {
         SSS, S, A, B, C, D
     }
-    [Flags]
-    public enum UniqueTypes : byte
+    [Flags] public enum UniqueTypes : uint
     {
-        Shiny, Holo        
+        Shiny = 0,
+        Holo = 1
     }
 }

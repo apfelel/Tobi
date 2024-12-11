@@ -44,14 +44,11 @@ public class GameManager : MonoSingleton<GameManager>
         {
             qualityIncrease = amount - 5;
             amount = 5;
-            Debug.Log(qualityIncrease);
         }
         for (int i = 0; i < amount; i++)
         {
             float randomFloat = Random.Range(0, _randomRange);
-            Debug.Log(randomFloat);
             randomFloat = Mathf.Pow(randomFloat / _randomRange, Mathf.Clamp01(1 - _qualityComboMultiplier * qualityIncrease)) * _randomRange;
-            Debug.Log(randomFloat);
             
             var randomCardSO = droppableCards.FirstOrDefault((c) =>
             {
@@ -65,13 +62,9 @@ public class GameManager : MonoSingleton<GameManager>
             var randomCard = new Card(randomCardSO, qualityIncrease); 
             _curCardPack.Add(randomCard);
             
-            var cardSlot = _sortedCollectedCardSlots[droppableCards.IndexOf(randomCardSO), randomCard.rarityIndex] ??= new CardSlot(randomCard);
-            cardSlot.CardAmount += 1;
-            
+            var cardSlot = _sortedCollectedCardSlots[droppableCards.IndexOf(randomCard.baseCardInfo), randomCard.rarityIndex] ??= new CardSlot(randomCard);
             if (cardSlot.BestCard.length < randomCard.length)
                 cardSlot.BestCard = randomCard;
-            
-            //_collectedCards.Add(new Card(randomCardSO));
         }
         ShowClosedPack();
     }
@@ -92,7 +85,15 @@ public class GameManager : MonoSingleton<GameManager>
         foreach (var card in _curCardPack)
         {
             var cardImage = Instantiate(_cardPrefab, _cardParent).GetComponent<CardImage>();
-            cardImage.Initialize(card);
+            
+            var cardSlot = _sortedCollectedCardSlots[droppableCards.IndexOf(card.baseCardInfo), card.rarityIndex] ??= new CardSlot(card);
+            bool isNew = cardSlot.CardAmount == 0;
+            cardSlot.CardAmount += 1;
+
+            bool isRecord = cardSlot.BestCard == card &! isNew;
+
+            cardImage.Initialize(card, isNew, isRecord);
+            
         }
         return true;
     }

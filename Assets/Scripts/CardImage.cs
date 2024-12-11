@@ -1,4 +1,6 @@
+using System;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,8 +12,9 @@ public class CardImage : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _amount;
     [Header("BigOnly")]
     [SerializeField] private TextMeshProUGUI _unique;
+    [SerializeField] private TextMeshProUGUI _isNewTxt, _isBestTxt ;
     
-    public void Initialize(Card card)
+    public void Initialize(Card card, bool isNew= false, bool isBest = false)
     {
         _name.text = card.baseCardInfo.cardName;
         _rarity.text = card.baseCardInfo.rarity.ToString();
@@ -23,7 +26,7 @@ public class CardImage : MonoBehaviour
         _background.material = new Material(_background.material);
         _icon.material = new Material(_icon.material);
         
-        if (card.uniqueTypes == CardEnums.UniqueTypes.Holo)
+        if (card.uniqueTypes.HasFlag(CardEnums.UniqueTypes.Holo))
         {
             _background.material.SetFloat("_Holo", 1);
         }
@@ -32,13 +35,23 @@ public class CardImage : MonoBehaviour
             _background.material.SetFloat("_Holo", 0);
         }
 
-        if (card.uniqueTypes == CardEnums.UniqueTypes.Shiny)
+        if (card.uniqueTypes.HasFlag(CardEnums.UniqueTypes.Shiny))
         {
             _icon.material.SetFloat("_Shiny", 1);
         }
         else
         {
             _icon.material.SetFloat("_Shiny", 0);
+        }
+
+        if (!isNew)
+        {
+            _isNewTxt.text = "";
+        }
+
+        if (!isBest)
+        {
+            _isBestTxt.text = "";
         }
     }
     public void Initialize(CardSlot card)

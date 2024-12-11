@@ -37,10 +37,11 @@ public class Card
             rarityIndex = 2;
         }
 
-        if (Random.Range(0, 50f) <= 1 * qualityMod)
+        if (Random.Range(0, 10) <= 1 * qualityMod)
         {
             uniqueTypes = null;
             uniqueTypes = CardEnums.UniqueTypes.Shiny | CardEnums.UniqueTypes.Holo;
+            Debug.Log(uniqueTypes);
             rarityIndex = 3;
         }
 
