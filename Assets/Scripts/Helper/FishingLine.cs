@@ -26,7 +26,7 @@ public class FishingLine : MonoBehaviour
 
     public void ThrowOut()
     {
-        _targetYMult = -0.2f;
+        _targetYMult = -0.8f;
     }
     // Update is called once per frame
     void FixedUpdate()
@@ -46,7 +46,7 @@ public class FishingLine : MonoBehaviour
 
         inBetweenKnot.Position = 
             (baitKnot.Position + (playerKnot.Position - baitKnot.Position) / 2) + new float3(Mathf.Sin(Time.time / 5) * 0.5f,
-                (-Vector3.Magnitude(playerKnot.Position - baitKnot.Position) / 7) * _currentYMult,
+                (-Vector3.Magnitude(playerKnot.Position - baitKnot.Position) / 10) * _currentYMult,
                 0);
         _splineContainer.Spline.SetKnot(1, inBetweenKnot);
     }

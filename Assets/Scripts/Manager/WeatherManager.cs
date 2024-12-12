@@ -5,12 +5,13 @@ using Random = UnityEngine.Random;
 
 public class WeatherManager : MonoBehaviour
 {
-    public ParticleSystem FogParticleSystem, RainParticleSystem;
+    public ParticleSystem FogParticleSystem, RainParticleSystem, GodRayParticleSystem, ShinyParticleSystem;
 
     public Light sun;
     public Color nightCol, rainColMult;
 
-    private float _timeToChangeWeather = 60, _curTimer, _dayCycleTimer, _dayCycleDuration = 40;
+    private float _timeToChangeWeather = 60, _curTimer, _dayCycleTimer, _dayCycleDuration = 120;
+    
     
     private static readonly int Rainy = Shader.PropertyToID("_Rainy");
     private static readonly int Night = Shader.PropertyToID("_Night");
@@ -23,8 +24,9 @@ public class WeatherManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        ChangeWeather(Weathers.Normal);
         Shader.SetGlobalFloat("_Rainy", 0);
+
+        ChangeWeather(Weathers.Rainy);
     }
 
     public void ChangeWeather(Weathers newWeather)
@@ -63,7 +65,7 @@ public class WeatherManager : MonoBehaviour
                     }
                 }
                 fogModule.rateOverTime = 0;
-                rainModule.rateOverTime = 20;
+                rainModule.rateOverTime = 60;
                 break;
             case Weathers.Normal:
                 if (Shader.GetGlobalFloat("_Rainy") > 0.9f)
@@ -86,7 +88,15 @@ public class WeatherManager : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        Shader.SetGlobalFloat(Night, Mathf.Clamp01(Mathf.Sin((_dayCycleTimer / _dayCycleDuration) * Mathf.PI * 2 + (Mathf.PI / 2)) * 0.5f + 0.5f));
+        float night =
+            Mathf.Clamp01(Mathf.Sin((_dayCycleTimer / _dayCycleDuration) * Mathf.PI * 2 + (Mathf.PI / 2)) * 0.5f + 0.5f);
+        Shader.SetGlobalFloat(Night, night);
+
+        var godrayEmission = GodRayParticleSystem.emission;
+        godrayEmission.rateOverTime = night * 10 - 6;
+
+        var ShinyParticleSystemEmission = this.ShinyParticleSystem.emission;
+        ShinyParticleSystemEmission.rateOverTime = 1 - night * 3; 
         
         _curTimer += Time.fixedDeltaTime;
         _dayCycleTimer += Time.fixedDeltaTime;

@@ -14,6 +14,9 @@ public class FishingRod : MonoBehaviour
     [SerializeField] private GameObject _fishingRodTipGameObject;
     
     [HideInInspector] public bool _released;
+
+    private Player _player;
+    
     private bool _hooked;
     private bool _miniGame;
     private bool _pauseFishingLogic;
@@ -39,6 +42,7 @@ public class FishingRod : MonoBehaviour
         _baitStartPosition = _baitGameObject.transform.position;
         _baitTargetPosition = _baitStartPosition;
         _baitGameObject.transform.position = _fishingRodTipGameObject.transform.position;
+        _player = GetComponent<Player>();
     }
     void FixedUpdate()
     {
@@ -91,18 +95,33 @@ public class FishingRod : MonoBehaviour
     }
     private void ThrowBait()
     {
+        _player.ChangeToThrowSprite();
+        _baitGameObject.SetActive(false);
+        var sequence = DOTween.Sequence();
+        sequence.AppendInterval(0.5f);
+        sequence.OnComplete(ThrowBaitDelayed);
+        
+        _pauseFishingLogic = false;
+        _hooked = false;
+        _miniGame = false;
+    }
+
+    private void ThrowBaitDelayed()
+    {
+        _baitGameObject.SetActive(true);
+
+        _released = true;
+
+        _player.ChangeToIdleSprite();
         _baitGameObject.transform.SetParent(null);
+        
         fishingLine.ThrowOut();
         _inAnimation = true;
         _baitGameObject.transform.DOMove(_baitTargetPosition, 1).OnComplete(ThrowBaitCompleted);
         
-        _pauseFishingLogic = false;
-        _released = true;
-        _hooked = false;
-        _miniGame = false;
         _audioSource.PlayOneShot(_throwOutAudio);
-    }
 
+    }
     void ThrowBaitCompleted()
     {
         _inAnimation = false;
@@ -121,6 +140,7 @@ public class FishingRod : MonoBehaviour
         
         _inAnimation = true;
         fishingLine.PullIn();
+        _player.ChangeToReelInSprite();
         _baitGameObject.transform.DOMove(_fishingRodTipGameObject.transform.position, 1).OnComplete(ReelInCompleted);
         _audioSource.PlayOneShot(_reelInAudio);
     }
@@ -129,6 +149,7 @@ public class FishingRod : MonoBehaviour
     {
         _inAnimation = false;
         _baitGameObject.transform.SetParent(_fishingRodTipGameObject.transform);
+        _player.ChangeToIdleSprite();
     }
     
     private void TryCatch()

@@ -5,14 +5,11 @@ public class DataPersistenceManager : MonoSingleton<DataPersistenceManager>
 {
    private void OnApplicationQuit()
    {
-      if (GameManager.Instance != null) 
-         SaveGame();
+      SaveGame();
    }
 
    private void OnDisable()
    {
-      if (GameManager.Instance == null) return;
-      
       SaveGame();
    }
 
@@ -38,14 +35,19 @@ public class DataPersistenceManager : MonoSingleton<DataPersistenceManager>
                }
                data[i, j].CardAmount = PlayerPrefs.GetInt(i + "-" + j + "_Amount", 0);
                data[i, j].BestCard.length = PlayerPrefs.GetFloat(i + "-" + j + "_Length", 0);               
-               data[i, j].BestCard.rarityIndex = PlayerPrefs.GetInt(i + "-" + j + "_RarityIndex", 0);               
-               try
+               data[i, j].BestCard.rarityIndex = PlayerPrefs.GetInt(i + "-" + j + "_RarityIndex", 0);   
+               
+               switch(data[i, j].BestCard.rarityIndex)
                {
-                  data[i, j].BestCard.uniqueTypes = Enum.Parse<CardEnums.UniqueTypes>(PlayerPrefs.GetString(i + "-" + j + "_UniqueTypes"));
-               }
-               catch (Exception e)
-               {
-                  PlayerPrefs.SetString(i + "-" + j + "_UniqueTypes", null);
+                  case 1:
+                     data[i, j].BestCard.uniqueTypes = CardEnums.UniqueTypes.Holo;
+                     break;
+                  case 2:
+                     data[i, j].BestCard.uniqueTypes = CardEnums.UniqueTypes.Shiny;
+                     break;
+                  case 3:
+                     data[i, j].BestCard.uniqueTypes = CardEnums.UniqueTypes.Shiny | CardEnums.UniqueTypes.Holo;
+                     break;
                }
             }
             catch (Exception _)
@@ -62,6 +64,7 @@ public class DataPersistenceManager : MonoSingleton<DataPersistenceManager>
       int uniqueCount = GameManager.Instance.maxUniqueCombinations;
 
       var data = GameManager.Instance.GetSortedCollectedCardSlots();
+      if (data == null) return;
       
       for (int i = 0; i < cardCount; i++)
       {

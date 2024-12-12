@@ -1,10 +1,16 @@
 fileFormatVersion: 2
-guid: fab9cdfd05a7d1b4485c7f946a27f0fd
+guid: a8e04f0c516dae14094a6328c3b8617e
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7611087402226106829
-    second: Mossy_Grass_basecolor_0
+      213: 5665722108655628092
+    second: Lillypad_SpecularMap_0
+  - first:
+      213: -6514997373842986681
+    second: Lillypad_SpecularMap_1
+  - first:
+      213: 7406995417308358955
+    second: Lillypad_SpecularMap_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -40,13 +46,13 @@ TextureImporter:
     filterMode: 1
     aniso: 1
     mipBias: 0
-    wrapU: 0
-    wrapV: 0
-    wrapW: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -113,13 +119,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Mossy_Grass_basecolor_0
+      name: Lillypad_SpecularMap_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 2048
-        height: 2048
+        x: 87
+        y: 203
+        width: 104
+        height: 107
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +134,52 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: dc14324caa300a960800000000000000
-      internalID: 7611087402226106829
+      spriteID: c3fee725d30b0ae40800000000000000
+      internalID: 5665722108655628092
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lillypad_SpecularMap_1
+      rect:
+        serializedVersion: 2
+        x: 196
+        y: 87
+        width: 141
+        height: 142
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7496c7b08641695a0800000000000000
+      internalID: -6514997373842986681
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lillypad_SpecularMap_2
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 1
+        width: 165
+        height: 164
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b296c9d861feac660800000000000000
+      internalID: 7406995417308358955
       vertices: []
       indices: 
       edges: []
@@ -138,7 +188,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +198,9 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Mossy_Grass_basecolor_0: 7611087402226106829
+      Lillypad_SpecularMap_0: 5665722108655628092
+      Lillypad_SpecularMap_1: -6514997373842986681
+      Lillypad_SpecularMap_2: 7406995417308358955
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

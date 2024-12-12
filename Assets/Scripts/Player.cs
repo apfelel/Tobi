@@ -4,11 +4,16 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
+    public GameObject throwSprite, IdleSprite, ReelInSprite, throwFishingrodTip, idleFishingrodTip;
+
+    public GameObject fishingRodTip;
     private CatchMiniGame _catchMiniGame;
     
     private PlayerInputs _input;
     private InputAction _move, _interact, _collection, _pause;
     private FishingRod _fishingRod;
+    
+    
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
@@ -70,6 +75,29 @@ public class Player : MonoBehaviour
     {
         if (UIManager.Instance.inMenu) return;
         _fishingRod.Interact();
+    }
+
+    public void ChangeToThrowSprite()
+    {
+        throwSprite.SetActive(true);
+        IdleSprite.SetActive(false);
+        ReelInSprite.SetActive(false);
+        fishingRodTip.transform.position = throwFishingrodTip.transform.position;
+    }
+    public void ChangeToIdleSprite()
+    {
+        throwSprite.SetActive(false);
+        IdleSprite.SetActive(true);
+        ReelInSprite.SetActive(false);
+        fishingRodTip.transform.position = idleFishingrodTip.transform.position;
+    }
+    
+    public void ChangeToReelInSprite()
+    {
+        throwSprite.SetActive(false);
+        IdleSprite.SetActive(false);
+        ReelInSprite.SetActive(true);
+        fishingRodTip.transform.position = throwFishingrodTip.transform.position;
     }
     private void ToggleCardCollection(InputAction.CallbackContext obj)
     {
