@@ -1,6 +1,5 @@
 using UnityEngine;
 
-[System.Serializable]
 public class Card
 {
     public float length;
@@ -41,7 +40,7 @@ public class Card
         {
             uniqueTypes = null;
             uniqueTypes = CardEnums.UniqueTypes.Shiny | CardEnums.UniqueTypes.Holo;
-            Debug.Log(uniqueTypes);
+            Debug.Log(uniqueTypes.ToString());
             rarityIndex = 3;
         }
 
@@ -49,7 +48,6 @@ public class Card
     }
 }
 
-[System.Serializable]
 public class CardSlot
 {
     public CardSlot(Card card)

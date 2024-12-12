@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,6 +27,8 @@ public class CatchMiniGame : MonoBehaviour
     
     private void OnEnable()
     {
+        UIManager.Instance.inBoosterView = true;
+
         _initialized = false;
         InitializeMiniGame();
     }
@@ -45,6 +46,8 @@ public class CatchMiniGame : MonoBehaviour
         fishingRodFillImage.fillAmount = 1 - (_timer / _timeToSolve);
         if (_timer > _timeToSolve)
         {
+            UIManager.Instance.inBoosterView = false;
+            
             GameManager.Instance.GeneratePack(_solvedAmount);
             gameObject.SetActive(false);
             _timer = 0;

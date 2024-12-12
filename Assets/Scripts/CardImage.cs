@@ -37,22 +37,15 @@ public class CardImage : MonoBehaviour
 
         if (card.uniqueTypes.HasFlag(CardEnums.UniqueTypes.Shiny))
         {
-            _icon.material.SetFloat("_Shiny", 1);
+            _icon.material.SetFloat("_Shiny", 0);
         }
         else
         {
-            _icon.material.SetFloat("_Shiny", 0);
+            _icon.material.SetFloat("_Shiny", 1);
         }
 
-        if (!isNew)
-        {
-            _isNewTxt.text = "";
-        }
-
-        if (!isBest)
-        {
-            _isBestTxt.text = "";
-        }
+        _isNewTxt.gameObject.SetActive(isNew);
+        _isBestTxt.gameObject.SetActive(isBest);
     }
     public void Initialize(CardSlot card)
     {
@@ -70,7 +63,8 @@ public class CardImage : MonoBehaviour
         
         _background.material = new Material(_background.material);
         _icon.material = new Material(_icon.material);
-        if (card.BestCard.uniqueTypes == CardEnums.UniqueTypes.Holo)
+        
+        if (card.BestCard.uniqueTypes.HasFlag(CardEnums.UniqueTypes.Holo))
         {
             _background.material.SetFloat("_Holo", 1);
         }
@@ -78,13 +72,14 @@ public class CardImage : MonoBehaviour
         {
             _background.material.SetFloat("_Holo", 0);
         }
-        if (card.BestCard.uniqueTypes == CardEnums.UniqueTypes.Shiny)
+
+        if (card.BestCard.uniqueTypes.HasFlag(CardEnums.UniqueTypes.Shiny))
         {
-            _icon.material.SetFloat("_Shiny", 1);
+            _icon.material.SetFloat("_Shiny", 0);
         }
         else
         {
-            _icon.material.SetFloat("_Shiny", 0);
+            _icon.material.SetFloat("_Shiny", 1);
         }
     }
 }

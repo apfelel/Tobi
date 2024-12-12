@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -9,8 +10,11 @@ public class UIManager : MonoSingleton<UIManager>
     [SerializeField] private Selectable DefaultButton;
 
     public bool inMenu, inCollection, inPause, inSettings;
+    public bool inBoosterView;
+
     public void ToggleCardCollection()
     {
+        if (inBoosterView) return;
         if (inPause)
         {
             TogglePauseMenu();
@@ -30,6 +34,8 @@ public class UIManager : MonoSingleton<UIManager>
     }
     public void TogglePauseMenu()
     {
+        if (inBoosterView) return;
+
         if (inSettings)
         {
             ToggleSettingsMenu();
@@ -57,6 +63,8 @@ public class UIManager : MonoSingleton<UIManager>
     }
     public void ToggleSettingsMenu()
     {
+        if (inBoosterView) return;
+
         if (settingsMenu.activeInHierarchy)
         {
             inMenu = false;

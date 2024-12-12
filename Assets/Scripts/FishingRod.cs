@@ -17,7 +17,7 @@ public class FishingRod : MonoBehaviour
     private bool _hooked;
     private bool _miniGame;
     private bool _pauseFishingLogic;
-    private bool _closePackOnNextInteract;
+    public  bool closePackOnNextInteract;
     private bool _miniGameEnd;
     public FishingLine fishingLine;
     [SerializeField] private GameObject _baitGameObject;
@@ -59,17 +59,15 @@ public class FishingRod : MonoBehaviour
     {
         if (_miniGameEnd)
         {
-            if (_closePackOnNextInteract)
+            if (closePackOnNextInteract)
             {
                 GameManager.Instance.StashPack();
-                _closePackOnNextInteract = false;
+                closePackOnNextInteract = false;
                 _miniGameEnd = false;
                 return;
             }
-            if (GameManager.Instance.OpenPack())
-            {
-                _closePackOnNextInteract = true;
-            }
+
+            GameManager.Instance.OpenPack();
             return;
         }
         
@@ -113,7 +111,7 @@ public class FishingRod : MonoBehaviour
         _splashHelper.ShowSplash();
     }
     
-    private void ResetFishingRod()
+    public void ResetFishingRod()
     {
         _splashHelper.HideSplash();
         _pauseFishingLogic = false;

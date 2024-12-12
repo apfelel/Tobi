@@ -1,21 +1,18 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using UnityEngine;
 
 public class DataPersistenceManager : MonoSingleton<DataPersistenceManager>
 {
-   private string dataDirPath, dataFileName;
-   private void Start()
-   {
-      dataDirPath = Application.persistentDataPath;
-      dataFileName = "SaveFile.game";
-      Debug.Log(dataDirPath);
-   }
-
    private void OnApplicationQuit()
    {
+      if (GameManager.Instance != null) 
+         SaveGame();
+   }
+
+   private void OnDisable()
+   {
+      if (GameManager.Instance == null) return;
+      
       SaveGame();
    }
 
@@ -39,11 +36,17 @@ public class DataPersistenceManager : MonoSingleton<DataPersistenceManager>
                   Card tempCard = new(GameManager.Instance.droppableCards[i]);
                   data[i, j] = new CardSlot(tempCard);
                }
-
-               data[i, j].CardAmount = PlayerPrefs.GetInt(i + "-" + j + "_Amount");
-               data[i, j].BestCard.length = PlayerPrefs.GetFloat(i + "-" + j + "_Length");
-               data[i, j].BestCard.rarityIndex = PlayerPrefs.GetInt(i + "-" + j + "_RarityIndex");
-               data[i, j].BestCard.uniqueTypes =Enum.Parse<CardEnums.UniqueTypes>(PlayerPrefs.GetString(i + "-" + j + "_UniqueTypes"));
+               data[i, j].CardAmount = PlayerPrefs.GetInt(i + "-" + j + "_Amount", 0);
+               data[i, j].BestCard.length = PlayerPrefs.GetFloat(i + "-" + j + "_Length", 0);               
+               data[i, j].BestCard.rarityIndex = PlayerPrefs.GetInt(i + "-" + j + "_RarityIndex", 0);               
+               try
+               {
+                  data[i, j].BestCard.uniqueTypes = Enum.Parse<CardEnums.UniqueTypes>(PlayerPrefs.GetString(i + "-" + j + "_UniqueTypes"));
+               }
+               catch (Exception e)
+               {
+                  PlayerPrefs.SetString(i + "-" + j + "_UniqueTypes", null);
+               }
             }
             catch (Exception _)
             {
@@ -55,7 +58,6 @@ public class DataPersistenceManager : MonoSingleton<DataPersistenceManager>
    }
    public void SaveGame()
    {
-      Debug.Log("SaveGame");
       int cardCount = GameManager.Instance.droppableCards.Count;
       int uniqueCount = GameManager.Instance.maxUniqueCombinations;
 
@@ -65,8 +67,6 @@ public class DataPersistenceManager : MonoSingleton<DataPersistenceManager>
       {
          for (int j = 0; j < uniqueCount; j++)
          {
-            Debug.Log("SaveGame");
-
             PlayerPrefs.SetInt(i + "-" + j + "_Amount", data[i, j].CardAmount);
             PlayerPrefs.SetFloat(i + "-" + j + "_Length", data[i, j].BestCard.length);
             PlayerPrefs.SetInt(i + "-" + j + "_RarityIndex", data[i, j].BestCard.rarityIndex);

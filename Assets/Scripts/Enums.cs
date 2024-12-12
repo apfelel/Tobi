@@ -7,7 +7,7 @@ public class CardEnums
     }
     [Flags] public enum UniqueTypes : uint
     {
-        Shiny = 0,
-        Holo = 1
+        Shiny = 0x1,
+        Holo = 0x2
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using TMPro;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class CardCollection : MonoBehaviour
 {
@@ -8,6 +9,14 @@ public class CardCollection : MonoBehaviour
     [SerializeField] private Transform cardParent;
     [SerializeField] private TextMeshProUGUI curPageDescription;
 
+    private AudioSource _audioSource;
+
+    public AudioClip[] pageClip;
+    
+    private void Awake()
+    {
+        _audioSource = GetComponent<AudioSource>();
+    }
     
     private int _curRarity;
     private void OnEnable()
@@ -16,8 +25,16 @@ public class CardCollection : MonoBehaviour
         Refresh();
     }
 
+    private void OnDisable()
+    {
+        _audioSource.PlayOneShot(pageClip[Random.Range(0, pageClip.Length)]);
+    }
+
     public void Refresh()
     {
+        _audioSource.PlayOneShot(pageClip[Random.Range(0, pageClip.Length)]);
+
+
         foreach (Transform card in cardParent)
         {
             Destroy(card.gameObject);
@@ -49,16 +66,13 @@ public class CardCollection : MonoBehaviour
 
     public void ChangeRarity(int change)
     {
+        var old = _curRarity;
+
         _curRarity += change;
-        Debug.Log(_curRarity);
         _curRarity = Mathf.Clamp(_curRarity, 0, GameManager.Instance.maxUniqueCombinations - 1);
-        Debug.Log(_curRarity);
-        Refresh();
-    }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
         
+        if(_curRarity != old)
+            Refresh();
     }
 
     // Update is called once per frame
