@@ -7,6 +7,11 @@ using Random = UnityEngine.Random;
 
 public class GameManager : MonoSingleton<GameManager>
 {
+    public AudioClip normal, holo, shiny, holoShiny;
+    public GameObject interactTxt;
+    public AudioClip _boosterRip;
+    private AudioSource _audioSource;
+    
     public List<CardScriptableObject> droppableCards;
     [Space] public CatchMiniGame catchMiniGame;
     
@@ -23,8 +28,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     private HorizontalLayoutGroup _cardParentGroup;
     
-    private bool _inOpenAnim;
-    
+    public bool _inOpenAnim;
     public int maxUniqueCombinations = 4;
 
     [ContextMenu("SortCards")]
@@ -39,7 +43,7 @@ public class GameManager : MonoSingleton<GameManager>
         _sortedCollectedCardSlots = new CardSlot[droppableCards.Count, maxUniqueCombinations];
         _sortedCollectedCardSlots = DataPersistenceManager.Instance.LoadGame();
         _cardParentGroup = _cardParent.GetComponent<HorizontalLayoutGroup>();
-
+        _audioSource = GetComponent<AudioSource>();
     }
     [ContextMenu("ManualCalculation")]
     private void CalculateRandomRange()
@@ -92,6 +96,8 @@ public class GameManager : MonoSingleton<GameManager>
 
     public void StashPack()
     {
+        interactTxt.SetActive(false);
+
         UIManager.Instance.inBoosterView = false;
         _curCardPack.Clear();
         foreach (Transform card in _cardParent)
@@ -106,6 +112,10 @@ public class GameManager : MonoSingleton<GameManager>
         if (_inOpenAnim) return false;
         if (!_closedPack.activeInHierarchy) return false;
 
+        interactTxt.SetActive(false);
+
+        _audioSource.PlayOneShot(_boosterRip);
+        
         _cardParentGroup.spacing = -1920;
         StartCoroutine(SmoothShow());
 
@@ -113,7 +123,7 @@ public class GameManager : MonoSingleton<GameManager>
         //SpawnPack
         foreach (var card in _curCardPack)
         {
-            delay += 0.2f;
+            delay += 1f;
             var cardImage = Instantiate(_cardPrefab, _cardParent).GetComponent<CardImage>();
             var cardSlot = _sortedCollectedCardSlots[droppableCards.IndexOf(card.baseCardInfo), card.rarityIndex] ??= new CardSlot(card);
             bool isNew = cardSlot.CardAmount == 0;
@@ -146,17 +156,35 @@ public class GameManager : MonoSingleton<GameManager>
     private IEnumerator DelayedCardShow(float time, CardImage cardImage,Card card, bool isNew,bool isRecord)
     {
         yield return new WaitForSeconds(time);
+        switch (card.rarityIndex)
+        {
+            case 0:
+                _audioSource.PlayOneShot(normal);
+                break;
+            case 1:
+                _audioSource.PlayOneShot(holo);
+                break;
+            case 2:
+                _audioSource.PlayOneShot(shiny);
+                break;
+            case 3:
+                _audioSource.PlayOneShot(holoShiny);
+                break;
+        }
         cardImage.Initialize(card, isNew, isRecord);
     }
     public void OnOpeningAnimEnd()
     {
         _inOpenAnim = false;
+        interactTxt.SetActive(true);
+
         _fishingRod.closePackOnNextInteract = true;
     }
     
     public void ShowClosedPack()
     {
         _closedPack.SetActive(true);
+        interactTxt.SetActive(true);
     }
     public void StartMiniGame()
     {

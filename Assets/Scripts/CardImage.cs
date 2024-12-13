@@ -6,18 +6,18 @@ using UnityEngine.UI;
 
 public class CardImage : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI _name, _rarity, _length;
+    [SerializeField] private TextMeshProUGUI _name, _length;
     [SerializeField] private Image _icon, _background;
     [Header("SmallOnly")]
     [SerializeField] private TextMeshProUGUI _amount;
     [Header("BigOnly")]
     [SerializeField] private TextMeshProUGUI _unique;
-    [SerializeField] private TextMeshProUGUI _isNewTxt, _isBestTxt ;
-    
+    [SerializeField] private GameObject _isNew, _isBest ;
+    [SerializeField] private GameObject _rarity;
     public void Initialize(Card card, bool isNew= false, bool isBest = false)
     {
         _name.text = card.baseCardInfo.cardName;
-        _rarity.text = card.baseCardInfo.rarity.ToString();
+        _rarity.transform.GetChild((int)card.baseCardInfo.rarity).gameObject.SetActive(true);
         _icon.sprite = card.baseCardInfo.icon;
         _background.sprite = card.baseCardInfo.background;
         _unique.text = card.uniqueTypes.ToString();
@@ -44,18 +44,19 @@ public class CardImage : MonoBehaviour
             _icon.material.SetFloat("_Shiny", 1);
         }
 
-        _isNewTxt.gameObject.SetActive(isNew);
-        _isBestTxt.gameObject.SetActive(isBest);
+        _isNew.gameObject.SetActive(isNew);
+        _isBest.gameObject.SetActive(isBest);
     }
     public void Initialize(CardSlot card)
     {
         if (card == null || card.CardAmount == 0)
         {
             _background.color = Color.black;
+            _icon.color = Color.black;
             return;
         }
         _name.text = card.BestCard.baseCardInfo.cardName;
-        _rarity.text = card.BestCard.baseCardInfo.rarity.ToString();
+        _rarity.transform.GetChild((int)card.BestCard.baseCardInfo.rarity).gameObject.SetActive(true);
         _icon.sprite = card.BestCard.baseCardInfo.icon;
         _background.sprite = card.BestCard.baseCardInfo.background;
         _length.text = card.BestCard.length.ToString("F1");

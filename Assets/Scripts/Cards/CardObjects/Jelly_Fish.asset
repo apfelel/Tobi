@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardName: Jellyfish
   rarity: 3
-  dropChance: 5
-  background: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
+  dropChance: 3
+  background: {fileID: 21300000, guid: 6cd56ac91814a274f86eaf99d29a0dd6, type: 3}
   icon: {fileID: 21300000, guid: 506917b0f2bfbe74fb2619e323b4cecf, type: 3}
   minLength: 50
   maxLength: 100

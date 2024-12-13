@@ -10,8 +10,11 @@ public class IBotManager : MonoBehaviour
     [SerializeField] private TextMeshPro _tutorialText;
     [SerializeField] private FishingRod _fishingRod;
     [SerializeField] private GameObject _fallTarget;
+    [SerializeField] private AudioClip _introClip, _throwOutClip, _reelInClip, _journalClip, _hm, _naw, _nice, _wow, _a;
 
     public SplashHelper _splashFelper;
+
+    private AudioSource _audioSource;
     
     private int _tutorialindex;
     public enum IBotFrames
@@ -31,6 +34,8 @@ public class IBotManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        _audioSource = GetComponent<AudioSource>();
+        
         SetFrame(IBotFrames.Idle);
 
         if (PlayerPrefs.GetInt("Tutorial", 0) == 0)
@@ -39,7 +44,8 @@ public class IBotManager : MonoBehaviour
         }
         else
         {
-            Destroy(gameObject);            
+            Destroy(gameObject);
+            Destroy(_tutorialText.gameObject);
         }
     }
 
@@ -55,25 +61,44 @@ public class IBotManager : MonoBehaviour
             sequence.OnComplete(() => SetFrame(IBotFrames.Idle));
         }
 
+        IEnumerator DelayedIntro()
+        {
+            yield return new WaitForSeconds(5);
+            if (_tutorialindex == 0)
+            {
+                _audioSource.clip = _throwOutClip;
+                _audioSource.Play();
+                _tutorialText.text = "Press E on your keyboard or X on your controller to cast your fishing rod";
+                _tutorialindex++;
+            }
+        }
         switch (_tutorialindex)
         {
             case 0:
-                _tutorialText.text = "Oi, press E | X button";
-                _tutorialindex++;
+                _audioSource.clip = _introClip;
+                _audioSource.Play();
+                _tutorialText.text = "Hi, I'm I-Bot, your personal fishing companion";
+                StartCoroutine(DelayedIntro());
                 break;
             case 1:
-                _tutorialText.text = "Oi, press E | X button when fish bites and then WASD | D-Pad";
+                _audioSource.clip = _reelInClip;
+                _audioSource.Play();
+                _tutorialText.text = "When you hear the bell, press E or X again to reel in";
                 _tutorialindex++;
                 break;
             case 2:
-                _tutorialText.text = "Oi, press TAB | Select for cards";
+                _audioSource.clip = _journalClip;
+                _audioSource.Play();
+                
+                _tutorialText.text = "Good work! You can see all your journal by pressing TAB or the Select button on your controller";
                 _tutorialindex++;
                 break;
             case 3:
+                _tutorialText.gameObject.SetActive(false);
                 _tutorialindex++;
                 break;
             case 4:
-
+                _tutorialText.gameObject.SetActive(true);
                 if (Random.Range(0, 5) != 0)
                 {
                     SetFrame(IBotFrames.Explaining);
@@ -82,23 +107,40 @@ public class IBotManager : MonoBehaviour
                     sequence.Append(transform.DOMove(transform.position, 0.4f));
                     sequence.OnComplete(() => SetFrame(IBotFrames.Idle));
                     
-                    Debug.Log("Test");
-                    _tutorialText.text = Random.Range(0, 5) switch
+                    switch (Random.Range(0, 4))
                     {
-                        0 => "Wow",
-                        1 => "Woah",
-                        2 => "Nice",
-                        3 => "Hmm",
-                        4 => "Nah",
-                        _ => _tutorialText.text
-                    };
+                        case 0:
+                            _audioSource.clip = _wow;
+                            _audioSource.Play();
+                            _tutorialText.text = "Wow";
+                            break;
+                        case 1:
+                            _audioSource.clip = _nice;
+                            _audioSource.Play();
+                            _tutorialText.text = "Nice";
+                            break;
+                        case 2:
+                            _audioSource.clip = _hm;
+                            _audioSource.Play();
+                            _tutorialText.text = "Hmm";
+                            break;
+                        case 3:
+                            _audioSource.clip = _naw;
+                            _audioSource.Play();
+                            _tutorialText.text = "Nah";
+                            break;
+                    }
+
                     _tutorialindex++;
                     return;
                 }
+                _audioSource.clip = _a;
+                _audioSource.Play();
                 _tutorialText.text = "AAAAAA";
                 _splashFelper.ShowSplash();
                 SetFrame(IBotFrames.Fall);
-                sequence.Append(transform.DOMove(_fallTarget.transform.position, 0.5f).OnComplete(() =>
+                PlayerPrefs.SetInt("Tutorial", 1);
+                sequence.Append(transform.DOMove(_fallTarget.transform.position, 1.3f).OnComplete(() =>
                 {
                     sequence.Complete();
                     Destroy(_tutorialText.gameObject);
@@ -123,7 +165,7 @@ public class IBotManager : MonoBehaviour
                     GiveTutorial();
                 break;
             case 2:
-                if(!_fishingRod._released)
+                if(!_fishingRod._released && !UIManager.Instance.inBoosterView)
                     GiveTutorial();
                 break;
             case 3:

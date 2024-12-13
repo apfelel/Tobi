@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: IBot
   m_EditorClassIdentifier: 
   cardName: IBot
-  rarity: 0
-  dropChance: 0.1
-  background: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
+  rarity: 2
+  dropChance: 0.4
+  background: {fileID: 21300000, guid: 6cd56ac91814a274f86eaf99d29a0dd6, type: 3}
   icon: {fileID: 21300000, guid: fed9144d5ef05b6478666a1afcb99daf, type: 3}
   minLength: 100
   maxLength: 200

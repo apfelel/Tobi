@@ -101,6 +101,7 @@ public class FishingRod : MonoBehaviour
         sequence.AppendInterval(0.5f);
         sequence.OnComplete(ThrowBaitDelayed);
         
+        _inAnimation = true;
         _pauseFishingLogic = false;
         _hooked = false;
         _miniGame = false;
@@ -116,7 +117,6 @@ public class FishingRod : MonoBehaviour
         _baitGameObject.transform.SetParent(null);
         
         fishingLine.ThrowOut();
-        _inAnimation = true;
         _baitGameObject.transform.DOMove(_baitTargetPosition, 1).OnComplete(ThrowBaitCompleted);
         
         _audioSource.PlayOneShot(_throwOutAudio);

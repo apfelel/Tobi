@@ -39,6 +39,9 @@ public class DataPersistenceManager : MonoSingleton<DataPersistenceManager>
                
                switch(data[i, j].BestCard.rarityIndex)
                {
+                  case 0:
+                     data[i, j].BestCard.uniqueTypes = CardEnums.UniqueTypes.Normal;
+                     break;
                   case 1:
                      data[i, j].BestCard.uniqueTypes = CardEnums.UniqueTypes.Holo;
                      break;

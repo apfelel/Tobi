@@ -172,7 +172,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Bush_Sticker_2_0: -5241587199601304478
+      Bush_Sticker_2_1: 9118221831966003350
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

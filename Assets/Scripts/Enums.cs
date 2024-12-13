@@ -3,11 +3,12 @@ public class CardEnums
 {
     public enum Rarities
     {
-        SSS, S, A, B, C, D
+        SSS, L, S, A, B, C, D
     }
     [Flags] public enum UniqueTypes : uint
     {
-        Shiny = 0x1,
-        Holo = 0x2
+        Normal = 1,
+        Shiny = 2,
+        Holo = 4
     }
 }

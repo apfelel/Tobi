@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -7,6 +8,8 @@ public class WeatherManager : MonoBehaviour
 {
     public ParticleSystem FogParticleSystem, RainParticleSystem, GodRayParticleSystem, ShinyParticleSystem;
 
+    public AudioClip dayAmbience, nightAmbience, rainAmbience;
+    private AudioSource _audioSource;
     public Light sun;
     public Color nightCol, rainColMult;
 
@@ -25,8 +28,9 @@ public class WeatherManager : MonoBehaviour
     void Start()
     {
         Shader.SetGlobalFloat("_Rainy", 0);
-
-        ChangeWeather(Weathers.Rainy);
+        _audioSource = GetComponent<AudioSource>();
+        ChangeWeather(Weathers.Normal);
+        _audioSource.PlayOneShot(dayAmbience, 1.3f);
     }
 
     public void ChangeWeather(Weathers newWeather)
@@ -56,6 +60,7 @@ public class WeatherManager : MonoBehaviour
                 rainModule.rateOverTime = 0;
                 break;
             case Weathers.Rainy:
+                _audioSource.PlayOneShot(rainAmbience);
                 if (Shader.GetGlobalFloat("_Rainy") < 0.1f)
                 {
                     for (int i = 0; i < 120; i++)
@@ -84,14 +89,15 @@ public class WeatherManager : MonoBehaviour
         }
        
     }
-    
+
+    private bool tempbool;
     // Update is called once per frame
     void FixedUpdate()
     {
         float night =
-            Mathf.Clamp01(Mathf.Sin((_dayCycleTimer / _dayCycleDuration) * Mathf.PI * 2 + (Mathf.PI / 2)) * 0.5f + 0.5f);
+            Mathf.Clamp01(Mathf.Sin((_dayCycleTimer / _dayCycleDuration) * Mathf.PI * 2) * 0.5f + 0.5f);
         Shader.SetGlobalFloat(Night, night);
-
+        Debug.Log(night);
         var godrayEmission = GodRayParticleSystem.emission;
         godrayEmission.rateOverTime = night * 10 - 6;
 
@@ -104,14 +110,21 @@ public class WeatherManager : MonoBehaviour
         if (_curTimer > _timeToChangeWeather)
         {
             ChangeWeather((Weathers)Random.Range(0, 3));
-            _timeToChangeWeather = Random.Range(10, 20);
             _curTimer = 0;
         }
-        sun.color = Color.white * Color.Lerp(nightCol,  Color.white, Mathf.Clamp01(Mathf.Sin((_dayCycleTimer / _dayCycleDuration) * Mathf.PI * 2 + (Mathf.PI / 2)) * 0.5f + 0.5f));
+        sun.color = Color.white * Color.Lerp(nightCol,  Color.white, Mathf.Clamp01(Mathf.Sin((_dayCycleTimer / _dayCycleDuration) * Mathf.PI * 2) * 0.5f + 0.5f));
         sun.color *= Color.Lerp(Color.white, rainColMult, Shader.GetGlobalFloat(Rainy));
         if (_dayCycleTimer > _dayCycleDuration)
         {
+            tempbool = false;
+            _audioSource.PlayOneShot(dayAmbience, 1.3f);
             _dayCycleTimer = 0;
+        }
+
+        if (_dayCycleTimer > _dayCycleDuration / 2 &! tempbool)
+        {
+            tempbool = true;
+            _audioSource.PlayOneShot(nightAmbience, 1.3f);
         }
     }
 }

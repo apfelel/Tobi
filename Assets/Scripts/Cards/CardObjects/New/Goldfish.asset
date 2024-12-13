@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44521047fbc3aac469d86956ea78995d, type: 3}
+  m_Name: Goldfish
+  m_EditorClassIdentifier: 
+  cardName: Goldfish
+  rarity: 4
+  dropChance: 2
+  background: {fileID: 21300000, guid: 6cd56ac91814a274f86eaf99d29a0dd6, type: 3}
+  icon: {fileID: 21300000, guid: 7b51dd0c0c132ea468f1f64b905d89ac, type: 3}
+  minLength: 50
+  maxLength: 100

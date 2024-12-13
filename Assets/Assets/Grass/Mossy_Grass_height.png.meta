@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Mossy_Grass_height_0: 8472963143250571042
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

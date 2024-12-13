@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44521047fbc3aac469d86956ea78995d, type: 3}
   m_Name: SeaHorse
   m_EditorClassIdentifier: 
-  cardName: SeaHorse
-  rarity: 3
+  cardName: Seahorse
+  rarity: 4
   dropChance: 3
-  background: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
+  background: {fileID: 21300000, guid: 6cd56ac91814a274f86eaf99d29a0dd6, type: 3}
   icon: {fileID: 21300000, guid: 1ea36e5aeb433d84ba2dba6e8525e15b, type: 3}
   minLength: 10
   maxLength: 20

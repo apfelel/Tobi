@@ -50,7 +50,7 @@ public class CardCollection : MonoBehaviour
         switch (_curRarity)
         {
             case 0:
-                curPageDescription.text = "Normal";
+                curPageDescription.text = "Common";
                 break;
             case 1:
                 curPageDescription.text = "Holo";

@@ -20,27 +20,25 @@ public class Card
     {
         rarityIndex = 0;
         baseCardInfo = cardInfosRef;
-        uniqueTypes = null;
+        uniqueTypes = CardEnums.UniqueTypes.Normal;
         var qualityMod = Mathf.Pow(1.5f, qualityIncrease);
-        Debug.Log(qualityMod);
-        if (Random.Range(0, 20f) <= 1 * qualityMod)
+        if (Random.Range(0, 40f) <= 1 * qualityMod)
         {
             uniqueTypes = CardEnums.UniqueTypes.Holo;
             rarityIndex = 1;
         }
 
-        if (Random.Range(0, 20f) <= 1 * qualityMod)
+        if (Random.Range(0, 40f) <= 1 * qualityMod)
         {
-            uniqueTypes = null;
+            uniqueTypes = CardEnums.UniqueTypes.Normal;
             uniqueTypes = CardEnums.UniqueTypes.Shiny;
             rarityIndex = 2;
         }
 
-        if (Random.Range(0, 10) <= 1 * qualityMod)
+        if (Random.Range(0, 80f) <= 1 * qualityMod)
         {
-            uniqueTypes = null;
+            uniqueTypes = CardEnums.UniqueTypes.Normal;
             uniqueTypes = CardEnums.UniqueTypes.Shiny | CardEnums.UniqueTypes.Holo;
-            Debug.Log(uniqueTypes.ToString());
             rarityIndex = 3;
         }
 

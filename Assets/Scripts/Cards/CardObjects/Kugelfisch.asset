@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Kugelfisch
   m_EditorClassIdentifier: 
   cardName: blowfish
-  rarity: 4
+  rarity: 5
   dropChance: 7
-  background: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
+  background: {fileID: 21300000, guid: 90f8fccc644fda949bf5cacd4db11437, type: 3}
   icon: {fileID: 21300000, guid: 1ec1c51acbce73c40acc0b76a638f72e, type: 3}
   minLength: 30
   maxLength: 70

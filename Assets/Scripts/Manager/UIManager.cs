@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class UIManager : MonoSingleton<UIManager>
 {
+    [SerializeField] private AudioClip click, hover;
+    private AudioSource _audioSource;
     [SerializeField] private GameObject cardCollection, settingsMenu, pauseMenu;
 
     [SerializeField] private Selectable DefaultButton;
@@ -99,5 +101,18 @@ public class UIManager : MonoSingleton<UIManager>
         SceneManager.LoadScene("MainMenu");
     }
 
-   
+    private void Start()
+    {
+        _audioSource = GetComponent<AudioSource>();
+    }
+
+    public void PlayHover()
+    {
+        _audioSource.PlayOneShot(hover, 0.5f);
+    }
+
+    public void PlayClick()
+    {
+        _audioSource.PlayOneShot(click);
+    }
 }
