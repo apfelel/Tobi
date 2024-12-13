@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Garados
   m_EditorClassIdentifier: 
   cardName: Sea-Dragon
-  rarity: 1
+  rarity: 3
   dropChance: 1
   background: {fileID: 21300000, guid: 0cf7126dd9858354f8b43452d7ccadc9, type: 3}
   icon: {fileID: 21300000, guid: 9d14c603d026e474ebb67cd22b7757c0, type: 3}
